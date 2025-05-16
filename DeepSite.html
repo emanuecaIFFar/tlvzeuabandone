@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Se organize de Forma rápida e com apoio de colegas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        
+        .gradient-bg {
+    background: linear-gradient(135deg, #6e9740 0%, #1a2e02 50%, #080c00 100%);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.certificate-card {
+    background: linear-gradient(135deg, #000000 0%, #d11414 100%);
+    border-left: 4px solid #7FA653;
+}
+
+.tab-active {
+    border-bottom: 3px solid #7FA653;
+    color: #7FA653;
+    font-weight: 600;
+}
+
+.filter-chip {
+    transition: all 0.3s ease;
+}
+
+.filter-chip:hover {
+    background-color: #7FA653;
+    color: rgb(0, 0, 0);
+}
+
+.filter-chip.active {
+    background-color: #7FA653;
+    color: rgb(0, 0, 0);
+}
+
+.sidebar-item:hover {
+    background-color: #000000;
+}
+
+.sidebar-item.active {
+    background-color: #99CD85;
+    border-left: 4px solid #7FA653;
+}
+
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-graduation-cap text-indigo-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">Plataforma (Nome ainda)</span>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button id="studentLoginBtn" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Junte-se como Aluno
+                    </button>
+                    <button id="professorLoginBtn" class="ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Junte-se como Professor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+                <div class="mb-8 lg:mb-0">
+                    <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl mb-4">
+                        Conectando alunos há professores...
+                    </h1>
+                    <p class="text-xl text-indigo-100 max-w-3xl">
+                        Uma plataforma completa para gerenciamento de projetos acadêmicos, monitorias e certificados digitais de forma mais definitiva dentro do Campus
+                    </p>
+                    <div class="mt-8">
+                        <button id="exploreProjectsBtn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                            Explorar Projetos
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img class="w-full rounded-lg shadow-xl" src="C:\Users\emanu\OneDrive\Área de Trabalho\Feira de Cie. Ideia com Deep Site\a.jpeg" alt="Estudantes colaborando">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-indigo-100 p-3 rounded-full">
+                                <i class="fas fa-certificate text-indigo-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Certificados emitidos</p>
+                                <p class="text-xl font-semibold text-gray-900">1,248</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Student Platform (Hidden by default) -->
+        <div id="studentPlatform" class="hidden">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                <!-- Sidebar -->
+                <div class="lg:col-span-3 mb-8 lg:mb-0">
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="Foto do aluno">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium text-gray-900">João Silva</h3>
+                                    <p class="text-sm text-gray-500">joao.silva@academico.edu.br</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="sidebar-item active p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-project-diagram text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Meus Projetos</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-item p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-certificate text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Meus Certificados</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-item p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-check text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Registro de Presença</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-item p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-cog text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Configurações</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="lg:col-span-9">
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h2 class="text-2xl font-bold text-gray-900">Projetos Disponíveis</h2>
+                            <p class="mt-1 text-sm text-gray-500">Inscreva-se nos projetos de seu interesse</p>
+                        </div>
+                        
+                        <!-- Filters -->
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex flex-wrap gap-2">
+                                <div class="filter-chip active px-4 py-2 rounded-full bg-indigo-100 text-indigo-800 text-sm font-medium cursor-pointer">
+                                    Todos
+                                </div>
+                                <div class="filter-chip px-4 py-2 rounded-full bg-gray-100 text-gray-800 text-sm font-medium cursor-pointer">
+                                    Tecnologia
+                                </div>
+                                <div class="filter-chip px-4 py-2 rounded-full bg-gray-100 text-gray-800 text-sm font-medium cursor-pointer">
+                                    Pesquisa
+                                </div>
+                                <div class="filter-chip px-4 py-2 rounded-full bg-gray-100 text-gray-800 text-sm font-medium cursor-pointer">
+                                    Extensão
+                                </div>
+                                <div class="filter-chip px-4 py-2 rounded-full bg-gray-100 text-gray-800 text-sm font-medium cursor-pointer">
+                                    Monitoria
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Projects Grid -->
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Project Card 1 -->
+                            <div class="project-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out">
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        <div class="flex-shrink-0 bg-indigo-100 p-3 rounded-full">
+                                            <i class="fas fa-laptop-code text-indigo-600"></i>
+                                        </div>
+                                        <div class="ml-4">
+                                            <h3 class="text-lg font-medium text-gray-900">Desenvolvimento Web</h3>
+                                            <p class="text-sm text-gray-500">Prof. Ana Oliveira</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-600 mb-4">Aprenda a criar sites modernos com HTML, CSS e JavaScript. Projeto prático com desenvolvimento de um portfólio online.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs font-medium px-2 py-1 bg-green-100 text-green-800 rounded-full">Tecnologia</span>
+                                        <span class="text-xs text-gray-500">10 vagas restantes</span>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 px-6 py-4">
+                                    <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Inscrever-se
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Project Card 2 -->
+                            <div class="project-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out">
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        <div class="flex-shrink-0 bg-purple-100 p-3 rounded-full">
+                                            <i class="fas fa-flask text-purple-600"></i>
+                                        </div>
+                                        <div class="ml-4">
+                                            <h3 class="text-lg font-medium text-gray-900">Pesquisa em IA</h3>
+                                            <p class="text-sm text-gray-500">Prof. Carlos Mendes</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-600 mb-4">Projeto de pesquisa em inteligência artificial aplicada à medicina. Participação em coleta e análise de dados.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs font-medium px-2 py-1 bg-purple-100 text-purple-800 rounded-full">Pesquisa</span>
+                                        <span class="text-xs text-gray-500">5 vagas restantes</span>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 px-6 py-4">
+                                    <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Inscrever-se
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Project Card 3 -->
+                            <div class="project-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out">
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        <div class="flex-shrink-0 bg-pink-100 p-3 rounded-full">
+                                            <i class="fas fa-chalkboard-teacher text-pink-600"></i>
+                                        </div>
+                                        <div class="ml-4">
+                                            <h3 class="text-lg font-medium text-gray-900">Monitoria de Cálculo</h3>
+                                            <p class="text-sm text-gray-500">Prof. Ricardo Almeida</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-600 mb-4">Monitoria para alunos com dificuldades em Cálculo I. Revisão de conceitos e resolução de exercícios.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs font-medium px-2 py-1 bg-pink-100 text-pink-800 rounded-full">Monitoria</span>
+                                        <span class="text-xs text-gray-500">15 vagas restantes</span>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 px-6 py-4">
+                                    <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Inscrever-se
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- My Projects Section -->
+                    <div class="mt-8 bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h2 class="text-xl font-bold text-gray-900">Meus Projetos</h2>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <!-- My Project 1 -->
+                            <div class="p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900">Desenvolvimento Web</h3>
+                                        <p class="text-sm text-gray-500">Status: <span class="text-green-600">Inscrito</span></p>
+                                    </div>
+                                    <div>
+                                        <button class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Registrar Presença
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Professor Platform (Hidden by default) -->
+        <div id="professorPlatform" class="hidden">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                <!-- Sidebar -->
+                <div class="lg:col-span-3 mb-8 lg:mb-0">
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="Foto do professor">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium text-gray-900">Prof. Ana Oliveira</h3>
+                                    <p class="text-sm text-gray-500">ana.oliveira@academico.edu.br</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="sidebar-item active p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-project-diagram text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Meus Projetos</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-item p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-users text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Alunos Inscritos</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-item p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-certificate text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Aprovar Certificados</span>
+                                </div>
+                            </div>
+                            <div class="sidebar-item p-4 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="fas fa-plus-circle text-gray-500 mr-3"></i>
+                                    <span class="text-sm font-medium text-gray-900">Novo Projeto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="lg:col-span-9">
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-gray-900">Meus Projetos</h2>
+                                    <p class="mt-1 text-sm text-gray-500">Gerencie seus projetos acadêmicos</p>
+                                </div>
+                                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <i class="fas fa-plus mr-2"></i> Novo Projeto
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Professor Projects -->
+                        <div class="divide-y divide-gray-200">
+                            <!-- Project 1 -->
+                            <div class="p-6">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900">Desenvolvimento Web</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Aprenda a criar sites modernos com HTML, CSS e JavaScript.</p>
+                                        <div class="mt-3 flex space-x-4">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                <i class="fas fa-users mr-1"></i> 15 inscritos
+                                            </span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <i class="fas fa-check-circle mr-1"></i> Ativo
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            <i class="fas fa-edit mr-1"></i> Editar
+                                        </button>
+                                        <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            <i class="fas fa-play mr-1"></i> Iniciar Aula
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Project 2 -->
+                            <div class="p-6">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900">Introdução ao Python</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Curso introdutório de programação em Python para iniciantes.</p>
+                                        <div class="mt-3 flex space-x-4">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                <i class="fas fa-users mr-1"></i> 22 inscritos
+                                            </span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-clock mr-1"></i> Em andamento
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            <i class="fas fa-edit mr-1"></i> Editar
+                                        </button>
+                                        <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            <i class="fas fa-play mr-1"></i> Iniciar Aula
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Students List -->
+                    <div class="mt-8 bg-white rounded-lg shadow overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h2 class="text-xl font-bold text-gray-900">Alunos Inscritos</h2>
+                            <p class="mt-1 text-sm text-gray-500">Lista de alunos inscritos no projeto "Desenvolvimento Web"</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Nome
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            E-mail
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Presenças
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-10 w-10">
+                                                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="">
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900">Maria Souza</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-500">maria.souza@academico.edu.br</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-500">8/10</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Ativo
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900 mr-3">Aprovar</button>
+                                            <button class="text-red-600 hover:text-red-900">Remover</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-10 w-10">
+                                                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="">
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900">Pedro Alves</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-500">pedro.alves@academico.edu.br</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-500">5/10</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                Pendente
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-indigo-600 hover:text-indigo-900 mr-3">Aprovar</button>
+                                            <button class="text-red-600 hover:text-red-900">Remover</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Certificates Section (Hidden by default) -->
+        <div id="certificatesSection" class="hidden">
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-900">Meus Certificados</h2>
+                    <p class="mt-1 text-sm text-gray-500">Certificados de participação em projetos acadêmicos</p>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Certificate 1 -->
+                    <div class="certificate-card p-6 rounded-lg shadow-sm">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">Desenvolvimento Web</h3>
+                                <p class="text-sm text-gray-500 mt-1">Prof. Ana Oliveira</p>
+                                <div class="mt-3">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1"></i> Concluído
+                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-2">
+                                        <i class="fas fa-calendar-alt mr-1"></i> 15/06/2023
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <i class="fas fa-download mr-1"></i> Baixar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate 2 -->
+                    <div class="certificate-card p-6 rounded-lg shadow-sm">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">Introdução ao Python</h3>
+                                <p class="text-sm text-gray-500 mt-1">Prof. Carlos Mendes</p>
+                                <div class="mt-3">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1"></i> Concluído
+                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-2">
+                                        <i class="fas fa-calendar-alt mr-1"></i> 10/05/2023
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <i class="fas fa-download mr-1"></i> Baixar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Default View (Projects List) -->
+        <div id="defaultView">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Projetos Disponíveis
+                </h2>
+                <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+                    Encontre projetos acadêmicos que combinam com seus interesses
+                </p>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8">
+                    <button id="allProjectsTab" class="tab-active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Todos os Projetos
+                    </button>
+                    <button id="technologyTab" class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Tecnologia
+                    </button>
+                    <button id="researchTab" class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Pesquisa
+                    </button>
+                    <button id="extensionTab" class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Extensão
+                    </button>
+                    <button id="mentoringTab" class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Monitoria
+                    </button>
+                </nav>
+            </div>
+            
+            <!-- Projects Grid -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-shrink-0 bg-indigo-100 p-3 rounded-full">
+                                <i class="fas fa-laptop-code text-indigo-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Desenvolvimento Web</h3>
+                                <p class="text-sm text-gray-500">Prof. Ana Oliveira</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Aprenda a criar sites modernos com HTML, CSS e JavaScript. Projeto prático com desenvolvimento de um portfólio online.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-medium px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full">Tecnologia</span>
+                            <span class="text-xs text-gray-500">10 vagas restantes</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4">
+                        <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Ver Detalhes
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-shrink-0 bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-flask text-purple-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Pesquisa em IA</h3>
+                                <p class="text-sm text-gray-500">Prof. Carlos Mendes</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Projeto de pesquisa em inteligência artificial aplicada à medicina. Participação em coleta e análise de dados.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-medium px-2 py-1 bg-purple-100 text-purple-800 rounded-full">Pesquisa</span>
+                            <span class="text-xs text-gray-500">5 vagas restantes</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4">
+                        <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Ver Detalhes
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-shrink-0 bg-pink-100 p-3 rounded-full">
+                                <i class="fas fa-chalkboard-teacher text-pink-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Monitoria de Cálculo</h3>
+                                <p class="text-sm text-gray-500">Prof. Ricardo Almeida</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Monitoria para alunos com dificuldades em Cálculo I. Revisão de conceitos e resolução de exercícios.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-medium px-2 py-1 bg-pink-100 text-pink-800 rounded-full">Monitoria</span>
+                            <span class="text-xs text-gray-500">15 vagas restantes</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4">
+                        <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Ver Detalhes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Sobre</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Nossa Missão</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Equipe</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Parceiros</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Ajuda</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">FAQ</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Contato</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Termos de Uso</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Recursos</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Documentação</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">Tutoriais</a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">API</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Conecte-se</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                <i class="fab fa-facebook mr-2"></i> Facebook
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                <i class="fab fa-twitter mr-2"></i> Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                <i class="fab fa-instagram mr-2"></i> Instagram
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
+                <div class="flex space-x-6 md:order-2">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                </div>
+                <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
+                    &copy; 2023 Plataforma Acadêmica. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                <div>
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100">
+                        <i class="fas fa-user text-indigo-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-5">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">
+                            Acesso à Plataforma
+                        </h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">
+                                Utilize seu e-mail institucional para acessar a plataforma.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 sm:mt-6">
+                    <form>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">E-mail Institucional</label>
+                            <div class="mt-1">
+                                <input type="email" name="email" id="email" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="seu.email@academico.edu.br">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
+                            <div class="mt-1">
+                                <input type="password" name="password" id="password" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="********">
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                                Lembrar de mim
+                            </label>
+                        </div>
+                    </form>
+                    <div class="mt-5 sm:mt-6">
+                        <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                            Acessar
+                        </button>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                            Esqueceu sua senha?
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Details Modal -->
+    <div id="projectDetailsModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">
+                                        Desenvolvimento Web
+                                    </h3>
+                                    <p class="text-sm text-gray-500 mt-1">Prof. Ana Oliveira</p>
+                                </div>
+                                <button id="closeDetailsModal" class="text-gray-400 hover:text-gray-500">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex items-center mb-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                        <i class="fas fa-users mr-1"></i> 10 vagas restantes
+                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-2">
+                                        <i class="fas fa-check-circle mr-1"></i> Inscrições abertas
+                                    </span>
+                                </div>
+                                <p class="text-gray-600 mb-4">
+                                    Este projeto tem como objetivo ensinar os fundamentos do desenvolvimento web moderno, incluindo HTML5, CSS3 e JavaScript ES6+. Os participantes terão a oportunidade de desenvolver um projeto prático ao longo do curso.
+                                </p>
+                                <div class="mb-6">
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Objetivos:</h4>
+                                    <ul class="list-disc pl-5 text-gray-600">
+                                        <li class="mb-1">Compreender a estrutura básica de páginas web</li>
+                                        <li class="mb-1">Aprender a estilizar páginas com CSS moderno</li>
+                                        <li class="mb-1">Implementar interatividade com JavaScript</li>
+                                        <li class="mb-1">Desenvolver um projeto prático completo</li>
+                                    </ul>
+                                </div>
+                                <div class="mb-6">
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Cronograma:</h4>
+                                    <div class="border-l-4 border-indigo-200 pl-4 py-1">
+                                        <div class="mb-3">
+                                            <p class="text-sm font-medium text-gray-900">Módulo 1: Introdução ao HTML5</p>
+                                            <p class="text-xs text-gray-500">15/08 - 19/08</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <p class="text-sm font-medium text-gray-900">Módulo 2: CSS Moderno</p>
+                                            <p class="text-xs text-gray-500">22/08 - 26/08</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <p class="text-sm font-medium text-gray-900">Módulo 3: JavaScript ES6+</p>
+                                            <p class="text-xs text-gray-500">29/08 - 02/09</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Projeto Final</p>
+                                            <p class="text-xs text-gray-500">05/09 - 16/09</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Requisitos:</h4>
+                                    <p class="text-gray-600 text-sm">
+                                        Conhecimento básico de informática. Não é necessário experiência prévia em programação.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Inscrever-se
+                    </button>
+                    <button id="cancelDetailsModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Register Presence Modal -->
+    <div id="registerPresenceModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                <div>
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                        <i class="fas fa-user-check text-green-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-5">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                            Registrar Presença
+                        </h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">
+                                Preencha os campos abaixo para registrar sua presença na atividade.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5">
+                    <form>
+                        <div>
+                            <label for="studentName" class="block text-sm font-medium text-gray-700">Nome Completo</label>
+                            <div class="mt-1">
+                                <input type="text" name="studentName" id="studentName" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="Seu nome completo">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="studentEmail" class="block text-sm font-medium text-gray-700">E-mail Institucional</label>
+                            <div class="mt-1">
+                                <input type="email" name="studentEmail" id="studentEmail" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="seu.email@academico.edu.br">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="projectSelect" class="block text-sm font-medium text-gray-700">Projeto/Atividade</label>
+                            <select id="projectSelect" name="projectSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                <option>Desenvolvimento Web - Aula 1</option>
+                                <option>Desenvolvimento Web - Aula 2</option>
+                                <option>Monitoria de Cálculo</option>
+                                <option>Pesquisa em IA - Reunião</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-5 sm:mt-6">
+                    <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
+                        Confirmar Presença
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle login modals
+        document.getElementById('studentLoginBtn').addEventListener('click', function() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('modalTitle').textContent = 'Acesso do Aluno';
+        });
+        
+        document.getElementById('professorLoginBtn').addEventListener('click', function() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('modalTitle').textContent = 'Acesso do Professor';
+        });
+        
+        // Close modal when clicking outside
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // Show student platform (for demo purposes)
+        document.getElementById('exploreProjectsBtn').addEventListener('click', function() {
+            document.getElementById('defaultView').classList.add('hidden');
+            document.getElementById('studentPlatform').classList.remove('hidden');
+        });
+        
+        // Show project details modal
+        const projectDetailButtons = document.querySelectorAll('button:contains("Ver Detalhes")');
+        projectDetailButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('projectDetailsModal').classList.remove('hidden');
+            });
+        });
+        
+        // Close project details modal
+        document.getElementById('closeDetailsModal').addEventListener('click', function() {
+            document.getElementById('projectDetailsModal').classList.add('hidden');
+        });
+        
+        document.getElementById('cancelDetailsModal').addEventListener('click', function() {
+            document.getElementById('projectDetailsModal').classList.add('hidden');
+        });
+        
+        // Show register presence modal
+        const registerPresenceButtons = document.querySelectorAll('button:contains("Registrar Presença")');
+        registerPresenceButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('registerPresenceModal').classList.remove('hidden');
+            });
+        });
+        
+        // Filter chips functionality
+        const filterChips = document.querySelectorAll('.filter-chip');
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('[id$="Tab"]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('tab-active'));
+                this.classList.add('tab-active');
+            });
+        });
+        
+        // Sidebar item functionality
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // For demo purposes, show certificates section when clicking on certificates tab
+                if (this.textContent.includes('Certificados')) {
+                    document.getElementById('studentPlatform').classList.add('hidden');
+                    document.getElementById('professorPlatform').classList.add('hidden');
+                    document.getElementById('certificatesSection').classList.remove('hidden');
+                } else if (this.textContent.includes('Projetos')) {
+                    document.getElementById('studentPlatform').classList.remove('hidden');
+                    document.getElementById('professorPlatform').classList.add('hidden');
+                    document.getElementById('certificatesSection').classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
