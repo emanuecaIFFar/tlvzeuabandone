@@ -1,12 +1,363 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tubo de Rubens - Visualizando o Som com Fogo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; }
+            25% { opacity: 0.6; }
+            50% { opacity: 1; }
+            75% { opacity: 0.7; }
+        }
+        
+        @keyframes fire {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .fire-bg {
+            background: linear-gradient(45deg, 
+                #ff0000, #ff4500, #ff8c00, #ffd700, 
+                #ff4500, #ff0000, #8b0000);
+            background-size: 400% 400%;
+            animation: fire 15s ease infinite;
+        }
+        
+        .flame {
+            background: linear-gradient(to top, 
+                rgba(255, 215, 0, 0.8), 
+                rgba(255, 140, 0, 0.7), 
+                rgba(255, 69, 0, 0.6), 
+                rgba(139, 0, 0, 0.5));
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px #ff4500, 0 0 40px #ff8c00;
+            animation: flicker 2s ease-in-out infinite alternate;
+        }
+        
+        .flame-small {
+            height: 30px;
+            width: 20px;
+            transform: scale(0.7);
+            opacity: 0.8;
+        }
+        
+        .flame-medium {
+            height: 50px;
+            width: 35px;
+        }
+        
+        .flame-large {
+            height: 80px;
+            width: 60px;
+        }
+        
+        .audio-visualizer {
+            background: linear-gradient(to right, 
+                #ff0000, #ff4500, #ff8c00, #ffd700);
+            height: 10px;
+            transition: all 0.1s ease;
+        }
+        
+        .flame-container {
+            perspective: 500px;
+        }
+        
+        .flame-animated {
+            animation: flameMovement 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes flameMovement {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            25% { transform: rotateX(5deg) rotateY(5deg); }
+            50% { transform: rotateX(0deg) rotateY(-5deg); }
+            75% { transform: rotateX(-5deg) rotateY(0deg); }
+            100% { transform: rotateX(5deg) rotateY(-5deg); }
+        }
+        
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-<body>
-    <h1>Teste merda 
-    </h1>
+<body class="min-h-screen fire-bg text-white flex flex-col items-center justify-center p-4">
+    <div class="absolute inset-0 overflow-hidden">
+        <!-- Animated flame background elements -->
+        <div class="absolute bottom-0 left-1/4 flame-container">
+            <div class="flame flame-large flame-animated"></div>
+        </div>
+        <div class="absolute bottom-0 left-1/2 flame-container">
+            <div class="flame flame-medium flame-animated" style="animation-delay: 0.5s;"></div>
+        </div>
+        <div class="absolute bottom-0 right-1/4 flame-container">
+            <div class="flame flame-small flame-animated" style="animation-delay: 1s;"></div>
+        </div>
+        <div class="absolute top-1/3 left-1/5 flame-container">
+            <div class="flame flame-small flame-animated" style="animation-delay: 1.5s;"></div>
+        </div>
+        <div class="absolute top-1/4 right-1/5 flame-container">
+            <div class="flame flame-medium flame-animated" style="animation-delay: 0.7s;"></div>
+        </div>
+    </div>
+    
+    <main class="z-10 w-full max-w-4xl glass-effect rounded-xl shadow-2xl overflow-hidden">
+        <header class="p-6 text-center border-b border-orange-600">
+            <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-500 to-red-600 mb-2">
+                Experiência com o Tubo de Rubens
+            </h1>
+            <h2 class="text-xl md:text-2xl font-semibold text-orange-200">
+                Visualizando o Som com Fogo
+            </h2>
+        </header>
+        
+        <div class="grid md:grid-cols-2 gap-6 p-6">
+            <section class="space-y-6">
+                <div class="glass-effect p-4 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Demonstração Interativa</h3>
+                    
+                    <div class="mb-4">
+                        <div id="visualizer" class="w-full h-32 rounded-lg flex items-end justify-center gap-1 mb-4">
+                            <!-- Audio bars will be inserted here by JavaScript -->
+                        </div>
+                        
+                        <div class="flex items-center justify-center space-x-4 mb-4">
+                            <button id="playBtn" class="bg-red-600 hover:bg-red-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all">
+                                <i class="fas fa-play text-xl"></i>
+                            </button>
+                            
+                            <div class="flex-1">
+                                <div class="audio-visualizer" id="volumeBar"></div>
+                                <div class="flex justify-between text-xs text-orange-200 mt-1">
+                                    <span>Volume</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <span class="text-orange-200">Faixa:</span>
+                            <select id="trackSelect" class="bg-black bg-opacity-50 text-white rounded px-3 py-1 border border-orange-600">
+                                <option value="1">Onda Senoidal (440Hz)</option>
+                                <option value="2">Música Clássica</option>
+                                <option value="3">Batida Eletrônica</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-effect p-4 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Como Funciona?</h3>
+                    <div class="space-y-3 text-orange-100">
+                        <p>O Tubo de Rubens é um experimento físico que demonstra a relação entre ondas sonoras e pressão.</p>
+                        <p>Um tubo perfurado cheio de gás inflamável tem chamas saindo pelos orifícios. Quando o som é reproduzido no tubo, as ondas de pressão fazem as chamas oscilarem.</p>
+                        <p>Experimente diferentes frequências sonoras para ver padrões distintos nas chamas!</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <div class="glass-effect p-4 rounded-lg h-full">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Simulação do Tubo</h3>
+                    
+                    <div class="relative h-64 w-full bg-black rounded-lg mb-4 overflow-hidden">
+                        <div id="tube" class="absolute bottom-0 left-0 right-0 h-16 bg-gray-800 flex justify-around items-end">
+                            <!-- Flames will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="text-sm text-orange-200">
+                        <p class="mb-2">No experimento real:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>As chamas mais altas representam áreas de baixa pressão</li>
+                            <li>As chamas mais baixas representam áreas de alta pressão</li>
+                            <li>Os padrões mostram os comprimentos de onda do som</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer class="p-4 text-center text-orange-200 text-sm border-t border-orange-600">
+            <p>Feira Científica 2023 | Física das Ondas Sonoras</p>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Audio setup
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            let audioSource = null;
+            let analyser = null;
+            let isPlaying = false;
+            let currentTrack = null;
+            
+            // Audio tracks
+            const tracks = {
+                1: {
+                    name: "Onda Senoidal (440Hz)",
+                    url: "https://assets.mixkit.co/sfx/preview/mixkit-simple-metronome-958.mp3"
+                },
+                2: {
+                    name: "Música Clássica",
+                    url: "https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3"
+                },
+                3: {
+                    name: "Batida Eletrônica",
+                    url: "https://assets.mixkit.co/music/preview/mixkit-racing-intense-energy-100.mp3"
+                }
+            };
+            
+            // DOM elements
+            const playBtn = document.getElementById('playBtn');
+            const trackSelect = document.getElementById('trackSelect');
+            const visualizer = document.getElementById('visualizer');
+            const tube = document.getElementById('tube');
+            const volumeBar = document.getElementById('volumeBar');
+            
+            // Create audio bars for visualization
+            for (let i = 0; i < 32; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'audio-visualizer w-3 rounded-t';
+                bar.style.height = '5px';
+                bar.style.backgroundColor = `hsl(${i * 10}, 100%, 50%)`;
+                visualizer.appendChild(bar);
+            }
+            
+            // Create flames for the tube
+            for (let i = 0; i < 20; i++) {
+                const flame = document.createElement('div');
+                flame.className = 'flame flame-small';
+                flame.style.animationDelay = `${i * 0.05}s`;
+                tube.appendChild(flame);
+            }
+            
+            // Play/Pause button functionality
+            playBtn.addEventListener('click', togglePlayback);
+            
+            // Track selection functionality
+            trackSelect.addEventListener('change', function() {
+                if (isPlaying) {
+                    stopAudio();
+                    loadAndPlayAudio(trackSelect.value);
+                }
+            });
+            
+            function togglePlayback() {
+                if (isPlaying) {
+                    stopAudio();
+                } else {
+                    loadAndPlayAudio(trackSelect.value);
+                }
+            }
+            
+            function loadAndPlayAudio(trackId) {
+                currentTrack = tracks[trackId];
+                
+                // Stop any existing audio
+                if (audioSource) {
+                    audioSource.disconnect();
+                }
+                
+                // Create new audio source
+                const audioElement = new Audio(currentTrack.url);
+                audioElement.crossOrigin = "anonymous";
+                audioSource = audioContext.createMediaElementSource(audioElement);
+                
+                // Create analyser
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 64;
+                
+                // Connect nodes
+                audioSource.connect(analyser);
+                analyser.connect(audioContext.destination);
+                
+                // Play audio
+                audioElement.play()
+                    .then(() => {
+                        isPlaying = true;
+                        playBtn.innerHTML = '<i class="fas fa-pause text-xl"></i>';
+                        visualize();
+                    })
+                    .catch(err => {
+                        console.error("Error playing audio:", err);
+                    });
+                
+                // Handle audio ending
+                audioElement.addEventListener('ended', function() {
+                    stopAudio();
+                });
+            }
+            
+            function stopAudio() {
+                if (audioSource) {
+                    audioSource.disconnect();
+                    audioSource = null;
+                }
+                isPlaying = false;
+                playBtn.innerHTML = '<i class="fas fa-play text-xl"></i>';
+                
+                // Reset visualizations
+                const bars = visualizer.querySelectorAll('div');
+                bars.forEach(bar => {
+                    bar.style.height = '5px';
+                });
+                
+                const flames = tube.querySelectorAll('.flame');
+                flames.forEach(flame => {
+                    flame.style.height = '30px';
+                });
+                
+                volumeBar.style.width = '0%';
+            }
+            
+            function visualize() {
+                if (!isPlaying) return;
+                
+                requestAnimationFrame(visualize);
+                
+                // Get frequency data
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyser.getByteFrequencyData(dataArray);
+                
+                // Update visualizer bars
+                const bars = visualizer.querySelectorAll('div');
+                for (let i = 0; i < bars.length; i++) {
+                    const value = dataArray[i % bufferLength] / 255;
+                    const height = value * 100 + 5;
+                    bars[i].style.height = `${height}px`;
+                    
+                    // Add fire-like color variation
+                    const hue = 20 + (value * 40);
+                    bars[i].style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+                }
+                
+                // Update tube flames
+                const flames = tube.querySelectorAll('.flame');
+                for (let i = 0; i < flames.length; i++) {
+                    const value = dataArray[i % bufferLength] / 255;
+                    const height = 30 + (value * 100);
+                    flames[i].style.height = `${height}px`;
+                    
+                    // Adjust flame opacity based on height
+                    flames[i].style.opacity = 0.5 + (value * 0.5);
+                }
+                
+                // Update volume bar
+                const volume = dataArray.reduce((sum, val) => sum + val, 0) / (bufferLength * 255);
+                volumeBar.style.width = `${volume * 100}%`;
+                volumeBar.style.backgroundColor = `hsl(${10 + volume * 30}, 100%, 50%)`;
+            }
+            
+            // Initialize with first track
+            loadAndPlayAudio('1');
+            stopAudio(); // Start in paused state
+        });
+    </script>
 </body>
 </html>
