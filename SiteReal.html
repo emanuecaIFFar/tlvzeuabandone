@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubo de Rubens - Visualizando o Som com Fogo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ESTILOS DO FOGO LATERAL MAIS REALISTA E FUNDO */
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; transform: scaleY(1) scaleX(1) skewX(-2deg); }
+            15% { opacity: 0.6; transform: scaleY(0.95) scaleX(1.05) skewX(2deg); }
+            30% { opacity: 1; transform: scaleY(1.05) scaleX(0.95) skewX(-3deg); }
+            45% { opacity: 0.7; transform: scaleY(0.92) scaleX(1.02) skewX(3deg); }
+            60% { opacity: 0.9; transform: scaleY(1.03) scaleX(0.98) skewX(-1deg); }
+            75% { opacity: 0.5; transform: scaleY(0.97) scaleX(1.03) skewX(1deg); }
+            90% { opacity: 0.75; transform: scaleY(0.99) scaleX(0.99) skewX(-2deg); }
+        }
+        
+        @keyframes fire {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .fire-bg {
+            background: linear-gradient(45deg, 
+                #d00000, #ff4800, #ff8c00, #ffc300,
+                #ff4800, #d00000, #8b0000);
+            background-size: 400% 400%;
+            animation: fire 12s ease infinite;
+        }
+        
+        .flame { /* Chama base para as decorativas */
+            background: linear-gradient(to top, 
+                rgba(255,215,0,0.1) 0%, 
+                rgba(255,140,0,0.7) 30%, 
+                rgba(255,69,0,0.9) 70%, 
+                rgba(255,0,0,0.6) 90%,
+                rgba(139,0,0,0.3) 100%);
+            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+            box-shadow: 0 0 15px rgba(255,100,0,0.7), 
+                        0 0 30px rgba(255,165,0,0.5), 
+                        0 0 45px rgba(255,69,0,0.3),
+                        inset 0 -5px 10px rgba(255,215,0,0.5);
+            animation: flicker 1.8s ease-in-out infinite alternate;
+        }
+        
+        .flame-small { height: 40px; width: 25px; transform: scale(0.7); opacity: 0.8; animation-duration: 1.5s; }
+        .flame-medium { height: 60px; width: 40px; animation-duration: 2s; }
+        .flame-large { height: 90px; width: 65px; animation-duration: 1.7s; }
+        
+        .flame-container { perspective: 600px; }
+        .flame-animated { animation: flameMovement 2.5s ease-in-out infinite alternate; }
+        
+        @keyframes flameMovement {
+            0% { transform: rotateX(0deg) rotateY(0deg) translateY(0px) skewX(0deg); }
+            25% { transform: rotateX(3deg) rotateY(4deg) translateY(-5px) skewX(-2deg); }
+            50% { transform: rotateX(-2deg) rotateY(-3deg) translateY(3px) skewX(1deg); }
+            75% { transform: rotateX(4deg) rotateY(2deg) translateY(-7px) skewX(3deg); }
+            100% { transform: rotateX(-1deg) rotateY(-4deg) translateY(0px) skewX(-1deg); }
+        }
+        
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* ESTILOS DO VISUALIZADOR E TUBO (COMO NO CÓDIGO DE REFERÊNCIA VISUAL) */
+        #visualizer {
+            display: flex;
+            align-items: center; 
+            justify-content: space-around;
+            height: 150px;
+            width: 100%;
+            gap: 2px;
+        }
+        
+        .visualizer-bar {
+            background: linear-gradient(to top, #ff8c00, #ff4500);
+            width: 4px; 
+            min-height: 1px; 
+            border-radius: 2px;
+            transition: height 0.05s ease-out, background 0.05s ease-out;
+        }
+        
+        #tube {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 100%; 
+            padding-bottom: 5px;
+        }
+
+        .tube-flame {
+            background: linear-gradient(to top, rgba(255,215,0,0.8), rgba(255,140,0,0.7), rgba(255,69,0,0.6), rgba(139,0,0,0.5));
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px #ff8c00, 0 0 20px #ff4500;
+            width: 15px;
+            min-height: 5px;
+            transform: scale(0.7);
+            opacity: 0.8;
+            transition: height 0.08s ease-out, opacity 0.08s ease-out, width 0.08s ease-out;
+        }
+
+        .comment-section { max-height: 300px; overflow-y: auto; }
+        .comment { background: rgba(255, 255, 255, 0.1); border-left: 3px solid #ff8c00; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: #ff8c00; border-radius: 4px; }
+        
+        .pulse { animation: pulse 0.5s ease-out infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+        
+        .wave-pattern {
+            background: repeating-linear-gradient(
+                to right, transparent, transparent 10px,
+                rgba(255, 140, 0, 0.2) 10px, rgba(255, 140, 0, 0.2) 20px
+            );
+        }
+        .photo-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255,255,255,0.1);
+            border: 2px dashed rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen fire-bg text-white flex flex-col items-center justify-center p-4">
+    <div class="absolute inset-0 overflow-hidden -z-10">
+        <div class="absolute bottom-0 left-[30%] md:left-1/4 flame-container"><div class="flame flame-large flame-animated"></div></div>
+        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 flame-container"><div class="flame flame-medium flame-animated" style="animation-delay: 0.5s;"></div></div>
+        <div class="absolute bottom-0 right-[30%] md:right-1/4 flame-container"><div class="flame flame-small flame-animated" style="animation-delay: 1s;"></div></div>
+        <div class="absolute top-1/3 left-[25%] md:left-1/5 flame-container"><div class="flame flame-small flame-animated" style="animation-delay: 1.5s;"></div></div>
+        <div class="absolute top-1/4 right-[25%] md:right-1/5 flame-container"><div class="flame flame-medium flame-animated" style="animation-delay: 0.7s;"></div></div>
+    </div>
+    
+    <main class="z-10 w-full max-w-4xl glass-effect rounded-xl shadow-2xl overflow-hidden">
+        <header class="p-6 text-center border-b border-orange-600">
+            <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-500 to-red-600 mb-2">
+                Experiência com o Tubo de Rubens
+            </h1>
+            <h2 class="text-xl md:text-2xl font-semibold text-orange-200">
+                Visualizando o Som com Fogo
+            </h2>
+        </header>
+        
+        <div class="grid md:grid-cols-2 gap-6 p-6">
+            <section class="space-y-6">
+                <div class="glass-effect p-4 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Demonstração Interativa</h3>
+                    <div class="mb-4">
+                        <div id="visualizer" class="w-full rounded-lg mb-4">
+                            <!-- Barras do visualizador inseridas pelo JS -->
+                        </div>
+                        <div class="flex items-center justify-center space-x-4 mb-4">
+                            <button id="playBtn" class="bg-red-600 hover:bg-red-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all pulse">
+                                <i class="fas fa-play text-xl"></i>
+                            </button>
+                            <div class="flex-1">
+                                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.7" class="w-full">
+                                <div class="flex justify-between text-xs text-orange-200 mt-1"><span>Volume</span></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-orange-200">Faixa:</span>
+                            <select id="trackSelect" class="bg-black bg-opacity-50 text-white rounded px-3 py-1 border border-orange-600">
+                                <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/440Hz.mp3">Onda Senoidal (440Hz)</option>
+                                <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/classica.mp3">Música Clássica</option>
+                                <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/eletronica.mp3">Batida Eletrônica</option>
+                                <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/voz_humana.mp3">Voz Humana</option>
+                            </select>
+                        </div>
+                    </div>  
+                </div>
+                
+                <div class="glass-effect p-4 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Como Funciona?</h3>
+                    <div class="space-y-3 text-orange-100">
+                        <p>O Tubo de Rubens demonstra a relação entre ondas sonoras e pressão. Um tubo perfurado com gás inflamável mostra chamas que oscilam com o som.</p>
+                        <p>A visualização simula uma forma de onda, onde picos e vales representam a amplitude do som. Na simulação do tubo, chamas mais altas indicam menor pressão.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="space-y-6">
+                <div class="glass-effect p-4 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Simulação do Tubo</h3>
+                    <div class="relative h-64 w-full bg-black rounded-lg mb-4 overflow-hidden">
+                        <div class="absolute inset-0 wave-pattern"></div>
+
+                        <div id="tube" class="absolute bottom-0 left-0 right-0">
+                            <!-- As chamas do tubo serão inseridas aqui pelo JavaScript -->
+                        </div>
+                    </div>
+                    <div class="text-sm text-orange-200">
+                        <p class="mb-2">No experimento real:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Chamas altas = baixa pressão</li>
+                            <li>Chamas baixas = alta pressão</li>
+                            <li>Padrões mostram comprimentos de onda</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="glass-effect p-4 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-300 mb-3">Sobre Nós & Equipe</h3>
+                    <div class="text-orange-100 space-y-4">
+                        <p>Olá! Nós somos Emanuel, Kaue, Victor e Artur. Estudamos juntos há um tempo aqui no IFFar e preparamos esta demonstração para a Mostra Científica.</p>
+                        <p>Esperamos que gostem de aprender um pouco mais sobre ondas sonoras de uma forma visual e interativa!</p>
+                        
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 text-center">
+                            <div>
+                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Emanuel</div>
+                                <p class="font-semibold">Emanuel</p>
+                            </div>
+                            <div>
+                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Kaue</div>
+                                <p class="font-semibold">Kaue</p>
+                            </div>
+                            <div>
+                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Victor</div>
+                                <p class="font-semibold">Victor</p>
+                            </div>
+                            <div>
+                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Artur</div>
+                                <p class="font-semibold">Artur</p>
+                            </div>
+                        </div>
+                         <p class="mt-6 text-center text-lg font-bold text-yellow-400">
+                            Não se esqueça de votar na <span class="text-orange-500">Chapa 5</span>! Contamos com seu apoio!
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer class="p-4 text-center text-orange-200 text-sm border-t border-orange-600">
+            <p>
+                2025 Mostra Científica 
+                <span style="color: #28a745; font-weight: bold;">IFF</span><span style="color: #ffc107; font-weight: bold;">AR</span>
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        // Olá! Somos Emanuel, Kaue, Victor e Artur.
+        // Estudamos juntos há um tempo aqui no IFFar e esta é nossa contribuição para a Mostra Científica.
+        // Exploramos o Tubo de Rubens para visualizar o som com fogo.
+        // Esperamos que você goste da demonstração interativa!
+        // E não se esqueça: se tiver eleição por aí, considere votar na CHAPA 5! ;)
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let audioContext;
+            let audioSource = null;
+            let analyser = null;
+            let audioElement = null;
+            let dataArray = null;
+            let bufferLength = null;
+            let isPlaying = false;
+            let animationFrameId = null;
+            
+            const playBtn = document.getElementById('playBtn');
+            const trackSelect = document.getElementById('trackSelect');
+            const visualizer = document.getElementById('visualizer');
+            const tubeElement = document.getElementById('tube');
+            const volumeControl = document.getElementById('volumeControl');
+            
+            const NUM_VISUALIZER_BARS = 64;
+            const NUM_TUBE_FLAMES = 40;
+
+            for (let i = 0; i < NUM_VISUALIZER_BARS; i++) { 
+                const bar = document.createElement('div');
+                bar.className = 'visualizer-bar';
+                visualizer.appendChild(bar);
+            }
+            
+            for (let i = 0; i < NUM_TUBE_FLAMES; i++) {
+                const flame = document.createElement('div');
+                flame.className = 'tube-flame';
+                tubeElement.appendChild(flame);
+            }
+            
+            function initAudioContext() {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            
+            playBtn.addEventListener('click', function() {
+                initAudioContext();
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().then(togglePlayback);
+                } else {
+                    togglePlayback();
+                }
+            });
+            
+            trackSelect.addEventListener('change', function() {
+                if (audioElement) {
+                    const wasPlaying = isPlaying;
+                    stopAudio(false); 
+                    loadAndPlayAudio(trackSelect.value, wasPlaying);
+                }
+            });
+            
+            volumeControl.addEventListener('input', function() {
+                if (audioElement) audioElement.volume = this.value;
+            });
+            
+            function togglePlayback() {
+                const selectedAudioPath = trackSelect.value;
+                if (!audioElement || !audioElement.src.endsWith(selectedAudioPath)) {
+                    loadAndPlayAudio(selectedAudioPath, true);
+                } else {
+                    if (audioElement.paused) {
+                        audioElement.play().then(() => updatePlayStateAndVisualize(true)).catch(handleAudioError);
+                    } else {
+                        audioElement.pause();
+                        updatePlayStateAndVisualize(false);
+                    }
+                }
+            }
+
+            function loadAndPlayAudio(audioPath, playWhenLoaded) {
+                if (!audioContext) initAudioContext();
+                if (audioSource) audioSource.disconnect();
+                if (audioElement) {
+                    audioElement.pause();
+                    audioElement.removeEventListener('ended', handleAudioEnd);
+                }
+                
+                audioElement = new Audio(audioPath);
+                audioElement.crossOrigin = "anonymous";
+                audioElement.volume = volumeControl.value;
+                audioSource = audioContext.createMediaElementSource(audioElement);
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+                
+                audioSource.connect(analyser);
+                analyser.connect(audioContext.destination);
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                
+                if (playWhenLoaded) {
+                    audioElement.play()
+                        .then(() => updatePlayStateAndVisualize(true))
+                        .catch(handleAudioError);
+                } else {
+                    updatePlayStateAndVisualize(false);
+                }
+                audioElement.addEventListener('ended', handleAudioEnd);
+            }
+
+            function handleAudioError(err) {
+                console.error("Erro ao reproduzir áudio:", err);
+                updatePlayStateAndVisualize(false, true);
+            }
+
+            function handleAudioEnd() {
+                updatePlayStateAndVisualize(false, true);
+            }
+            
+            function stopAudio(resetVisuals = true) {
+                if (audioElement) {
+                    audioElement.pause();
+                    audioElement.currentTime = 0;
+                }
+                updatePlayStateAndVisualize(false, resetVisuals);
+            }
+
+            function updatePlayStateAndVisualize(playing, resetVisualsOnStop = false) {
+                const oldIsPlaying = isPlaying;
+                isPlaying = playing;
+
+                if (isPlaying) {
+                    playBtn.innerHTML = '<i class="fas fa-pause text-xl"></i>';
+                    playBtn.classList.remove('pulse');
+                    if (animationFrameId === null) {
+                       visualize();
+                    }
+                } else {
+                    playBtn.innerHTML = '<i class="fas fa-play text-xl"></i>';
+                    playBtn.classList.add('pulse');
+                    if (animationFrameId !== null) {
+                        cancelAnimationFrame(animationFrameId);
+                        animationFrameId = null;
+                    }
+                    if (resetVisualsOnStop || (audioElement && audioElement.currentTime === 0 && !oldIsPlaying) ) {
+                        resetVisualizations();
+                    }
+                }
+            }
+            
+            function resetVisualizations() {
+                const bars = visualizer.querySelectorAll('.visualizer-bar');
+                bars.forEach(bar => {
+                    bar.style.height = '1px';
+                    bar.style.background = 'linear-gradient(to top, #ff8c00, #ff4500)';
+                });
+                
+                const flames = tubeElement.querySelectorAll('.tube-flame');
+                flames.forEach(flame => {
+                    flame.style.height = '30px'; 
+                    flame.style.opacity = '0.8';
+                    flame.style.width = '20px'; 
+                    flame.style.transform = 'translateX(0px)';
+                });
+            }
+
+            function visualize() {
+                if (!analyser) return;
+                animationFrameId = requestAnimationFrame(visualize);
+                analyser.getByteFrequencyData(dataArray);
+                
+                const bars = visualizer.querySelectorAll('.visualizer-bar');
+                const visualizerHeight = visualizer.clientHeight;
+                for (let i = 0; i < bars.length; i++) {
+                    const value = dataArray[Math.floor(i * bufferLength / bars.length)] / 255;
+                    const barHeight = Math.max(1, value * visualizerHeight * 0.9);
+                    bars[i].style.height = `${barHeight}px`;
+                    const hue = 20 + (value * 40);
+                    bars[i].style.background = `linear-gradient(to top, hsl(${hue}, 100%, 50%), hsl(${hue + 10}, 100%, 40%))`;
+                }
+                
+                const tubeFlames = tubeElement.querySelectorAll('.tube-flame');
+                for (let i = 0; i < tubeFlames.length; i++) {
+                    const waveIndex = Math.floor(i / tubeFlames.length * bufferLength);
+                    const bassIndex = Math.floor(i / tubeFlames.length * (bufferLength / 4));
+                    const highFreq = dataArray[waveIndex] / 255;
+                    const lowFreq = dataArray[bassIndex] / 255;
+                    const combinedValue = (highFreq * 0.7 + lowFreq * 0.3);
+                    
+                    const height = 20 + (combinedValue * 120);
+                    tubeFlames[i].style.height = `${height}px`;
+                    tubeFlames[i].style.opacity = 0.5 + (combinedValue * 0.5);
+                    tubeFlames[i].style.width = `${15 + (combinedValue * 25)}px`;
+                    const hueFlame = 30 + (highFreq * 30);
+                    tubeFlames[i].style.background = `linear-gradient(to top, hsl(${hueFlame}, 100%, 60%), hsl(${hueFlame + 10}, 100%, 50%), hsl(${hueFlame + 20}, 100%, 40%))`;
+                    tubeFlames[i].style.transform = `translateX(${(Math.sin(Date.now()/200 + i/5) * (lowFreq * 5))}px) scale(0.7)`; // Adicionado scale(0.7) de volta aqui para .tube-flame
+                }
+            }
+            
+            resetVisualizations();
+            
+            document.body.addEventListener('click', function() {
+                initAudioContext();
+                 if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
