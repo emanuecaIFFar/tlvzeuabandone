@@ -6,137 +6,92 @@
     <title>Tubo de Rubens - Visualizando o Som com Fogo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script> <!-- Movido para o head -->
     <style>
-        /* ESTILOS DO FOGO LATERAL MAIS REALISTA E FUNDO */
-        @keyframes flicker {
-            0%, 100% { opacity: 0.8; transform: scaleY(1) scaleX(1) skewX(-2deg); }
-            15% { opacity: 0.6; transform: scaleY(0.95) scaleX(1.05) skewX(2deg); }
-            30% { opacity: 1; transform: scaleY(1.05) scaleX(0.95) skewX(-3deg); }
-            45% { opacity: 0.7; transform: scaleY(0.92) scaleX(1.02) skewX(3deg); }
-            60% { opacity: 0.9; transform: scaleY(1.03) scaleX(0.98) skewX(-1deg); }
-            75% { opacity: 0.5; transform: scaleY(0.97) scaleX(1.03) skewX(1deg); }
-            90% { opacity: 0.75; transform: scaleY(0.99) scaleX(0.99) skewX(-2deg); }
+        html {
+            scroll-behavior: smooth;
         }
+        /* ESTILOS DO FOGO (Como no seu original) */
+        @keyframes flicker { 0%, 100% { opacity: 0.8; transform: scaleY(1) scaleX(1) skewX(-2deg); } 15% { opacity: 0.6; transform: scaleY(0.95) scaleX(1.05) skewX(2deg); } 30% { opacity: 1; transform: scaleY(1.05) scaleX(0.95) skewX(-3deg); } 45% { opacity: 0.7; transform: scaleY(0.92) scaleX(1.02) skewX(3deg); } 60% { opacity: 0.9; transform: scaleY(1.03) scaleX(0.98) skewX(-1deg); } 75% { opacity: 0.5; transform: scaleY(0.97) scaleX(1.03) skewX(1deg); } 90% { opacity: 0.75; transform: scaleY(0.99) scaleX(0.99) skewX(-2deg); } }
+        @keyframes fire { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        @keyframes fire {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .fire-bg {
-            background: linear-gradient(45deg, 
-                #d00000, #ff4800, #ff8c00, #ffc300,
-                #ff4800, #d00000, #8b0000);
-            background-size: 400% 400%;
-            animation: fire 12s ease infinite;
-        }
-        
-        .flame { /* Chama base para as decorativas */
-            background: linear-gradient(to top, 
-                rgba(255,215,0,0.1) 0%, 
-                rgba(255,140,0,0.7) 30%, 
-                rgba(255,69,0,0.9) 70%, 
-                rgba(255,0,0,0.6) 90%,
-                rgba(139,0,0,0.3) 100%);
-            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-            box-shadow: 0 0 15px rgba(255,100,0,0.7), 
-                        0 0 30px rgba(255,165,0,0.5), 
-                        0 0 45px rgba(255,69,0,0.3),
-                        inset 0 -5px 10px rgba(255,215,0,0.5);
-            animation: flicker 1.8s ease-in-out infinite alternate;
-        }
-        
+        .fire-bg { background: linear-gradient(45deg, #d00000, #ff4800, #ff8c00, #ffc300, #ff4800, #d00000, #8b0000); background-size: 400% 400%; animation: fire 12s ease infinite; }
+        .flame { background: linear-gradient(to top, rgba(255,215,0,0.1) 0%, rgba(255,140,0,0.7) 30%, rgba(255,69,0,0.9) 70%, rgba(255,0,0,0.6) 90%, rgba(139,0,0,0.3) 100%); border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%; box-shadow: 0 0 15px rgba(255,100,0,0.7), 0 0 30px rgba(255,165,0,0.5), 0 0 45px rgba(255,69,0,0.3), inset 0 -5px 10px rgba(255,215,0,0.5); animation: flicker 1.8s ease-in-out infinite alternate; }
         .flame-small { height: 40px; width: 25px; transform: scale(0.7); opacity: 0.8; animation-duration: 1.5s; }
         .flame-medium { height: 60px; width: 40px; animation-duration: 2s; }
         .flame-large { height: 90px; width: 65px; animation-duration: 1.7s; }
-        
         .flame-container { perspective: 600px; }
         .flame-animated { animation: flameMovement 2.5s ease-in-out infinite alternate; }
+        @keyframes flameMovement { 0% { transform: rotateX(0deg) rotateY(0deg) translateY(0px) skewX(0deg); } 25% { transform: rotateX(3deg) rotateY(4deg) translateY(-5px) skewX(-2deg); } 50% { transform: rotateX(-2deg) rotateY(-3deg) translateY(3px) skewX(1deg); } 75% { transform: rotateX(4deg) rotateY(2deg) translateY(-7px) skewX(3deg); } 100% { transform: rotateX(-1deg) rotateY(-4deg) translateY(0px) skewX(-1deg); } }
         
-        @keyframes flameMovement {
-            0% { transform: rotateX(0deg) rotateY(0deg) translateY(0px) skewX(0deg); }
-            25% { transform: rotateX(3deg) rotateY(4deg) translateY(-5px) skewX(-2deg); }
-            50% { transform: rotateX(-2deg) rotateY(-3deg) translateY(3px) skewX(1deg); }
-            75% { transform: rotateX(4deg) rotateY(2deg) translateY(-7px) skewX(3deg); }
-            100% { transform: rotateX(-1deg) rotateY(-4deg) translateY(0px) skewX(-1deg); }
-        }
+        /* EFEITOS GERAIS E VISUALIZADOR */
+        .glass-effect { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+        #visualizer { display: flex; align-items: center; justify-content: space-around; height: 150px; width: 100%; gap: 2px; }
+        .visualizer-bar { background: linear-gradient(to top, #ff8c00, #ff4500); width: 4px; min-height: 1px; border-radius: 2px; transition: height 0.05s ease-out, background 0.05s ease-out; }
+        #tube { display: flex; justify-content: space-around; align-items: flex-end; height: 100%; padding-bottom: 5px; }
+        .tube-flame { background: linear-gradient(to top, rgba(255,215,0,0.8), rgba(255,140,0,0.7), rgba(255,69,0,0.6), rgba(139,0,0,0.5)); border-radius: 50% 50% 20% 20%; box-shadow: 0 0 10px #ff8c00, 0 0 20px #ff4500; width: 15px; min-height: 5px; transform: scale(0.7); opacity: 0.8; transition: height 0.08s ease-out, opacity 0.08s ease-out, width 0.08s ease-out, background 0.08s ease-out; }
         
-        .glass-effect {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
+        /* UTILITÁRIOS E OUTROS */
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); } ::-webkit-scrollbar-thumb { background: #ff8c00; border-radius: 4px; }
+        .pulse { animation: pulse 0.5s ease-out infinite alternate; } @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+        .wave-pattern { background: repeating-linear-gradient( to right, transparent, transparent 10px, rgba(255, 140, 0, 0.2) 10px, rgba(255, 140, 0, 0.2) 20px ); }
+        .photo-placeholder { width: 100px; height: 100px; background-color: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+        #trackSelect:focus, #volumeControl:focus, #sensitivityControl:focus { outline: 2px solid #ffc300; outline-offset: 2px; }
+        #customAudio { font-size: 0.8rem; }
 
-        /* ESTILOS DO VISUALIZADOR E TUBO (COMO NO CÓDIGO DE REFERÊNCIA VISUAL) */
-        #visualizer {
-            display: flex;
-            align-items: center; 
-            justify-content: space-around;
-            height: 150px;
-            width: 100%;
-            gap: 2px;
+        /* --- MODO CLARO --- */
+        body.light-mode {
+            background-color: #f3f4f6; /* Tailwind bg-gray-100 */
+            color: #1f2937; /* Tailwind text-gray-800 */
         }
-        
-        .visualizer-bar {
-            background: linear-gradient(to top, #ff8c00, #ff4500);
-            width: 4px; 
-            min-height: 1px; 
-            border-radius: 2px;
-            transition: height 0.05s ease-out, background 0.05s ease-out;
+        body.light-mode .fire-bg { /* Garante que a animação de fogo não sobreponha */
+            background: none;
+            animation: none;
         }
-        
-        #tube {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            height: 100%; 
-            padding-bottom: 5px;
+        body.light-mode .glass-effect {
+            background: rgba(255, 255, 255, 0.8); /* Fundo mais claro e opaco */
+            color: #1f2937; /* Texto escuro dentro dos cards */
+            border: 1px solid rgba(0,0,0,0.1);
+            backdrop-filter: blur(8px); /* Blur um pouco menor talvez */
+            -webkit-backdrop-filter: blur(8px);
         }
+        /* Cores de texto específicas para modo claro */
+        body.light-mode .text-orange-200,
+        body.light-mode .text-yellow-300,
+        body.light-mode .text-orange-100,
+        body.light-mode #volumeLabel,
+        body.light-mode label[for="trackSelect"],
+        body.light-mode label[for="sensitivityControl"] {
+            color: #b45309 !important; /* Tailwind amber-700, !important para sobrescrever utilitários */
+        }
+        body.light-mode #trackSelect {
+            background-color: rgba(229, 231, 235, 0.7); /* bg-gray-200 com opacidade */
+            color: #1f2937;
+            border-color: #b45309;
+        }
+        body.light-mode .photo-placeholder {
+            background-color: rgba(0,0,0,0.05);
+            color: #78350f; /* Amber 800 */
+            border-color: rgba(0,0,0,0.2);
+        }
+        body.light-mode .wave-pattern {
+            background: repeating-linear-gradient( to right, transparent, transparent 10px, rgba(234, 88, 12, 0.15) 10px, rgba(234, 88, 12, 0.15) 20px ); /* Laranja mais sutil */
+            opacity: 0.7;
+        }
+        body.light-mode h1.bg-clip-text { /* Ajuste do gradiente do título principal para modo claro */
+             background-image: linear-gradient(to right, #f59e0b, #ea580c, #c2410c); /* Ambar 500, Laranja 600, Laranja 700 */
+        }
+        body.light-mode footer {
+            border-top-color: #d97706; /* Amber 600 */
+        }
+        body.light-mode ::-webkit-scrollbar-thumb { background: #d97706; }
+        body.light-mode ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
 
-        .tube-flame {
-            background: linear-gradient(to top, rgba(255,215,0,0.8), rgba(255,140,0,0.7), rgba(255,69,0,0.6), rgba(139,0,0,0.5));
-            border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 10px #ff8c00, 0 0 20px #ff4500;
-            width: 15px;
-            min-height: 5px;
-            transform: scale(0.7);
-            opacity: 0.8;
-            transition: height 0.08s ease-out, opacity 0.08s ease-out, width 0.08s ease-out;
-        }
-
-        .comment-section { max-height: 300px; overflow-y: auto; }
-        .comment { background: rgba(255, 255, 255, 0.1); border-left: 3px solid #ff8c00; }
-        
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
-        ::-webkit-scrollbar-thumb { background: #ff8c00; border-radius: 4px; }
-        
-        .pulse { animation: pulse 0.5s ease-out infinite alternate; }
-        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
-        
-        .wave-pattern {
-            background: repeating-linear-gradient(
-                to right, transparent, transparent 10px,
-                rgba(255, 140, 0, 0.2) 10px, rgba(255, 140, 0, 0.2) 20px
-            );
-        }
-        .photo-placeholder {
-            width: 100px;
-            height: 100px;
-            background-color: rgba(255,255,255,0.1);
-            border: 2px dashed rgba(255,255,255,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-        }
     </style>
 </head>
-<body class="min-h-screen fire-bg text-white flex flex-col items-center justify-center p-4">
-    <div class="absolute inset-0 overflow-hidden -z-10">
+<body class="min-h-screen fire-bg text-white flex flex-col items-center justify-center p-4 transition-colors duration-300">
+    <div class="absolute inset-0 overflow-hidden -z-10" id="decorativeFlamesContainer">
+        <!-- Chamas decorativas de fundo -->
         <div class="absolute bottom-0 left-[30%] md:left-1/4 flame-container"><div class="flame flame-large flame-animated"></div></div>
         <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 flame-container"><div class="flame flame-medium flame-animated" style="animation-delay: 0.5s;"></div></div>
         <div class="absolute bottom-0 right-[30%] md:right-1/4 flame-container"><div class="flame flame-small flame-animated" style="animation-delay: 1s;"></div></div>
@@ -145,13 +100,16 @@
     </div>
     
     <main class="z-10 w-full max-w-4xl glass-effect rounded-xl shadow-2xl overflow-hidden">
-        <header class="p-6 text-center border-b border-orange-600">
+        <header class="p-6 text-center border-b border-orange-600 relative">
             <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-500 to-red-600 mb-2">
                 Experiência com o Tubo de Rubens
             </h1>
             <h2 class="text-xl md:text-2xl font-semibold text-orange-200">
                 Visualizando o Som com Fogo
             </h2>
+            <button id="themeToggle" title="Alternar tema" class="absolute top-4 right-4 bg-black bg-opacity-30 hover:bg-opacity-50 text-yellow-300 px-3 py-1 rounded-md text-sm transition-all border border-yellow-400 hover:border-yellow-300">
+                <i class="fas fa-sun"></i> <span>Modo Claro</span>
+            </button>
         </header>
         
         <div class="grid md:grid-cols-2 gap-6 p-6">
@@ -159,26 +117,33 @@
                 <div class="glass-effect p-4 rounded-lg">
                     <h3 class="text-xl font-bold text-yellow-300 mb-3">Demonstração Interativa</h3>
                     <div class="mb-4">
-                        <div id="visualizer" class="w-full rounded-lg mb-4">
-                            <!-- Barras do visualizador inseridas pelo JS -->
-                        </div>
+                        <div id="visualizer" class="w-full rounded-lg mb-4"></div>
                         <div class="flex items-center justify-center space-x-4 mb-4">
-                            <button id="playBtn" class="bg-red-600 hover:bg-red-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all pulse">
+                            <button id="playBtn" aria-label="Reproduzir Áudio" class="bg-red-600 hover:bg-red-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all pulse">
                                 <i class="fas fa-play text-xl"></i>
                             </button>
                             <div class="flex-1">
+                                <label for="volumeControl" class="sr-only">Volume</label>
                                 <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.7" class="w-full">
-                                <div class="flex justify-between text-xs text-orange-200 mt-1"><span>Volume</span></div>
+                                <div class="flex justify-between text-xs text-orange-200 mt-1"><span id="volumeLabel">Volume</span></div>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-orange-200">Faixa:</span>
-                            <select id="trackSelect" class="bg-black bg-opacity-50 text-white rounded px-3 py-1 border border-orange-600">
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                            <label for="trackSelect" class="text-orange-200 shrink-0">Faixa:</label>
+                            <select id="trackSelect" class="flex-auto bg-black bg-opacity-50 text-white rounded px-3 py-1 border border-orange-600 focus:border-yellow-400">
                                 <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/440Hz.mp3">Onda Senoidal (440Hz)</option>
                                 <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/classica.mp3">Música Clássica</option>
                                 <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/eletronica.mp3">Batida Eletrônica</option>
                                 <option value="https://raw.githubusercontent.com/emanueca/tlvzeuabandone/main/Musicas/voz_humana.mp3">Voz Humana</option>
                             </select>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                             <label for="customAudio" class="text-orange-200 shrink-0">Upload:</label>
+                            <input type="file" id="customAudio" accept="audio/*" class="text-orange-200 flex-auto" title="Enviar seu próprio áudio" />
+                        </div>
+                        <div class="flex items-center space-x-2 mt-3">
+                            <label for="sensitivityControl" class="text-orange-200">Sensibilidade:</label>
+                            <input type="range" id="sensitivityControl" min="0.2" max="2.5" step="0.01" value="1" class="w-full md:w-32">
                         </div>
                     </div>  
                 </div>
@@ -186,8 +151,28 @@
                 <div class="glass-effect p-4 rounded-lg">
                     <h3 class="text-xl font-bold text-yellow-300 mb-3">Como Funciona?</h3>
                     <div class="space-y-3 text-orange-100">
-                        <p>O Tubo de Rubens demonstra a relação entre ondas sonoras e pressão. Um tubo perfurado com gás inflamável mostra chamas que oscilam com o som.</p>
-                        <p>A visualização simula uma forma de onda, onde picos e vales representam a amplitude do som. Na simulação do tubo, chamas mais altas indicam menor pressão.</p>
+                        <p>O Tubo de Rubens demonstra a relação entre ondas sonoras e pressão. Ondas estacionárias são formadas no tubo, com pontos de alta pressão (nós) e baixa pressão (antinós).</p>
+                        <p>Na simulação: chamas altas indicam baixa pressão (antinós), chamas baixas indicam alta pressão (nós).</p>
+                        <button id="toggleWave" class="mt-2 bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded transition-all text-sm">
+                            Visualizar Nós e Antinós
+                        </button>
+                        <div id="waveDiagram" class="w-full flex justify-center mt-4 hidden">
+                            <svg width="100%" height="80" viewBox="0 0 320 80" preserveAspectRatio="xMidYMid meet">
+                                <path d="M0,40 C40,0 60,80 100,40 S140,0 160,40 S200,80 240,40 S280,0 320,40" fill="none" stroke="#ff8c00" stroke-width="2"/>
+                                <circle cx="0" cy="40" r="4" fill="#ff4500"><title>Nó</title></circle>
+                                <circle cx="50" cy="11" r="5" fill="#ffc300"><title>Antinó (Baixa Pressão)</title></circle>
+                                <circle cx="80" cy="69" r="5" fill="#ffc300"><title>Antinó (Baixa Pressão)</title></circle>
+                                <circle cx="100" cy="40" r="4" fill="#ff4500"><title>Nó</title></circle>
+                                <circle cx="130" cy="11" r="5" fill="#ffc300"><title>Antinó (Baixa Pressão)</title></circle>
+                                <circle cx="160" cy="40" r="4" fill="#ff4500"><title>Nó</title></circle>
+                                <circle cx="190" cy="69" r="5" fill="#ffc300"><title>Antinó (Baixa Pressão)</title></circle>
+                                <circle cx="240" cy="40" r="4" fill="#ff4500"><title>Nó</title></circle>
+                                <circle cx="270" cy="11" r="5" fill="#ffc300"><title>Antinó (Baixa Pressão)</title></circle>
+                                <circle cx="320" cy="40" r="4" fill="#ff4500"><title>Nó</title></circle>
+                                <text x="5" y="15" font-size="10" class="svg-text-antinode">Antinó (↑ chama)</text>
+                                <text x="5" y="70" font-size="10" class="svg-text-node">Nó (↓ chama)</text>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -195,18 +180,18 @@
             <section class="space-y-6">
                 <div class="glass-effect p-4 rounded-lg">
                     <h3 class="text-xl font-bold text-yellow-300 mb-3">Simulação do Tubo</h3>
-                    <div class="relative h-64 w-full bg-black rounded-lg mb-4 overflow-hidden">
-                        <div class="absolute inset-0 wave-pattern"></div>
-
-                        <div id="tube" class="absolute bottom-0 left-0 right-0">
-                            <!-- As chamas do tubo serão inseridas aqui pelo JavaScript -->
-                        </div>
+                    <div id="tubeContainer" class="relative h-64 w-full bg-black bg-opacity-30 rounded-lg mb-4 overflow-hidden">
+                        <div class="absolute inset-0 wave-pattern opacity-50"></div>
+                        <div id="tube" class="absolute bottom-0 left-0 right-0"></div>
+                        <button id="saveTubeImgBtn" title="Salvar imagem da simulação" class="absolute top-2 right-2 bg-yellow-500 hover:bg-yellow-600 text-black px-2 py-1 rounded text-xs shadow transition-all z-20">
+                            <i class="fas fa-camera"></i> Salvar
+                        </button>
                     </div>
                     <div class="text-sm text-orange-200">
                         <p class="mb-2">No experimento real:</p>
                         <ul class="list-disc pl-5 space-y-1">
-                            <li>Chamas altas = baixa pressão</li>
-                            <li>Chamas baixas = alta pressão</li>
+                            <li>Chamas altas = baixa pressão (antinós)</li>
+                            <li>Chamas baixas = alta pressão (nós)</li>
                             <li>Padrões mostram comprimentos de onda</li>
                         </ul>
                     </div>
@@ -215,26 +200,13 @@
                 <div class="glass-effect p-4 rounded-lg">
                     <h3 class="text-xl font-bold text-yellow-300 mb-3">Sobre Nós & Equipe</h3>
                     <div class="text-orange-100 space-y-4">
-                        <p>Olá! Nós somos Emanuel, Kaue, Victor e Artur. Estudamos juntos há um tempo aqui no IFFar e preparamos esta demonstração para a Mostra Científica.</p>
-                        <p>Esperamos que gostem de aprender um pouco mais sobre ondas sonoras de uma forma visual e interativa!</p>
-                        
+                        <p>Olá! Nós somos Emanuel, Kaue, Victor e Artur. Estudamos juntos no IFFar e preparamos esta demonstração para a Mostra Científica.</p>
+                        <p>Esperamos que gostem de aprender sobre ondas sonoras de forma visual e interativa!</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 text-center">
-                            <div>
-                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Emanuel</div>
-                                <p class="font-semibold">Emanuel</p>
-                            </div>
-                            <div>
-                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Kaue</div>
-                                <p class="font-semibold">Kaue</p>
-                            </div>
-                            <div>
-                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Victor</div>
-                                <p class="font-semibold">Victor</p>
-                            </div>
-                            <div>
-                                <div class="photo-placeholder mx-auto mb-2 rounded-full flex items-center justify-center">Foto Artur</div>
-                                <p class="font-semibold">Artur</p>
-                            </div>
+                            <div> <div class="photo-placeholder mx-auto mb-2 flex items-center justify-center text-3xl"><i class="fas fa-user"></i></div> <p class="font-semibold">Emanuel</p> </div>
+                            <div> <div class="photo-placeholder mx-auto mb-2 flex items-center justify-center text-3xl"><i class="fas fa-user"></i></div> <p class="font-semibold">Kaue</p> </div>
+                            <div> <div class="photo-placeholder mx-auto mb-2 flex items-center justify-center text-3xl"><i class="fas fa-user"></i></div> <p class="font-semibold">Victor</p> </div>
+                            <div> <div class="photo-placeholder mx-auto mb-2 flex items-center justify-center text-3xl"><i class="fas fa-user"></i></div> <p class="font-semibold">Artur</p> </div>
                         </div>
                          <p class="mt-6 text-center text-lg font-bold text-yellow-400">
                             Não se esqueça de votar na <span class="text-orange-500">Chapa 5</span>! Contamos com seu apoio!
@@ -245,220 +217,333 @@
         </div>
         
         <footer class="p-4 text-center text-orange-200 text-sm border-t border-orange-600">
-            <p>
-                2025 Mostra Científica 
-                <span style="color: #28a745; font-weight: bold;">IFF</span><span style="color: #ffc107; font-weight: bold;">AR</span>
-            </p>
+            <p> 2025 Mostra Científica <span style="color: #28a745; font-weight: bold;">IFF</span><span style="color: #ffc107; font-weight: bold;">AR</span> </p>
         </footer>
     </main>
 
     <script>
-        // Olá! Somos Emanuel, Kaue, Victor e Artur.
-        // Estudamos juntos há um tempo aqui no IFFar e esta é nossa contribuição para a Mostra Científica.
-        // Exploramos o Tubo de Rubens para visualizar o som com fogo.
-        // Esperamos que você goste da demonstração interativa!
-        // E não se esqueça: se tiver eleição por aí, considere votar na CHAPA 5! ;)
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Constantes e Configurações ---
+        const NUM_VISUALIZER_BARS = 64;
+        const NUM_TUBE_FLAMES = 40;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            let audioContext;
-            let audioSource = null;
-            let analyser = null;
-            let audioElement = null;
-            let dataArray = null;
-            let bufferLength = null;
-            let isPlaying = false;
-            let animationFrameId = null;
-            
-            const playBtn = document.getElementById('playBtn');
-            const trackSelect = document.getElementById('trackSelect');
-            const visualizer = document.getElementById('visualizer');
-            const tubeElement = document.getElementById('tube');
-            const volumeControl = document.getElementById('volumeControl');
-            
-            const NUM_VISUALIZER_BARS = 64;
-            const NUM_TUBE_FLAMES = 40;
+        // --- Elementos do DOM (Cache) ---
+        const playBtn = document.getElementById('playBtn');
+        const trackSelect = document.getElementById('trackSelect');
+        const visualizerContainer = document.getElementById('visualizer');
+        const tubeElement = document.getElementById('tube');
+        const tubeContainer = document.getElementById('tubeContainer'); // Para captura de imagem
+        const volumeControl = document.getElementById('volumeControl');
+        const customAudioInput = document.getElementById('customAudio');
+        const saveTubeImgBtn = document.getElementById('saveTubeImgBtn');
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const toggleWaveBtn = document.getElementById('toggleWave');
+        const waveDiagramDiv = document.getElementById('waveDiagram');
+        const sensitivityControl = document.getElementById('sensitivityControl');
+        const decorativeFlamesContainer = document.getElementById('decorativeFlamesContainer');
+        
+        let visualizerBars = [];
+        let tubeFlames = [];
 
-            for (let i = 0; i < NUM_VISUALIZER_BARS; i++) { 
+        // --- Estado do Áudio, Visualização e UI ---
+        let audioContext;
+        let audioSource = null;
+        let analyser = null;
+        let audioElement = null;
+        let dataArray = null;
+        let bufferLength = null;
+        let isPlaying = false;
+        let animationFrameId = null;
+        let visualizerHeight = 0;
+        let currentSensitivity = 1; // Valor inicial da sensibilidade
+        let objectUrl = null; // Para armazenar a URL do áudio customizado e revogá-la
+
+        // --- Funções de Inicialização ---
+        function setupDOMReferences() {
+            for (let i = 0; i < NUM_VISUALIZER_BARS; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'visualizer-bar';
-                visualizer.appendChild(bar);
+                visualizerContainer.appendChild(bar);
+                visualizerBars.push(bar);
             }
-            
+            if (visualizerContainer) visualizerHeight = visualizerContainer.clientHeight;
+
             for (let i = 0; i < NUM_TUBE_FLAMES; i++) {
                 const flame = document.createElement('div');
                 flame.className = 'tube-flame';
                 tubeElement.appendChild(flame);
+                tubeFlames.push(flame);
             }
-            
-            function initAudioContext() {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
+        }
+        
+        async function initAudioContextOnce() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
-            
-            playBtn.addEventListener('click', function() {
-                initAudioContext();
-                if (audioContext.state === 'suspended') {
-                    audioContext.resume().then(togglePlayback);
-                } else {
-                    togglePlayback();
-                }
-            });
-            
-            trackSelect.addEventListener('change', function() {
-                if (audioElement) {
-                    const wasPlaying = isPlaying;
-                    stopAudio(false); 
-                    loadAndPlayAudio(trackSelect.value, wasPlaying);
-                }
-            });
-            
-            volumeControl.addEventListener('input', function() {
-                if (audioElement) audioElement.volume = this.value;
-            });
-            
-            function togglePlayback() {
-                const selectedAudioPath = trackSelect.value;
-                if (!audioElement || !audioElement.src.endsWith(selectedAudioPath)) {
-                    loadAndPlayAudio(selectedAudioPath, true);
-                } else {
-                    if (audioElement.paused) {
-                        audioElement.play().then(() => updatePlayStateAndVisualize(true)).catch(handleAudioError);
-                    } else {
-                        audioElement.pause();
-                        updatePlayStateAndVisualize(false);
+            if (audioContext.state === 'suspended') {
+                try {
+                    await audioContext.resume();
+                    const audioNotice = document.getElementById('audio-notice');
+                    if (audioNotice) audioNotice.remove();
+                } catch (e) {
+                    console.error("Erro ao resumir AudioContext:", e);
+                    if (!document.getElementById('audio-notice')) {
+                        const notice = document.createElement('p');
+                        notice.id = 'audio-notice';
+                        notice.textContent = "Clique na página para ativar o áudio.";
+                        notice.className = 'text-center text-yellow-300 my-2';
+                        if (visualizerContainer && visualizerContainer.parentElement) {
+                           visualizerContainer.parentElement.insertBefore(notice, visualizerContainer);
+                        }
                     }
                 }
             }
+        }
 
-            function loadAndPlayAudio(audioPath, playWhenLoaded) {
-                if (!audioContext) initAudioContext();
-                if (audioSource) audioSource.disconnect();
-                if (audioElement) {
-                    audioElement.pause();
-                    audioElement.removeEventListener('ended', handleAudioEnd);
+        // --- Gerenciamento de Áudio ---
+        function setupAudioProcessing() {
+            if (!audioElement || !audioContext) return;
+            if (audioSource) audioSource.disconnect();
+            
+            audioSource = audioContext.createMediaElementSource(audioElement);
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            analyser.smoothingTimeConstant = 0.8; // Suavização para visualização
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+        }
+
+        async function loadAudio(audioPath, playWhenReady = false) {
+            await initAudioContextOnce(); 
+
+            if (audioElement) {
+                audioElement.pause();
+                audioElement.removeEventListener('ended', handleAudioEnd);
+                audioElement.removeEventListener('error', handleAudioError);
+                audioElement.removeEventListener('canplaythrough', () => handleCanPlayThrough(playWhenReady)); // Limpa listener antigo
+                if (objectUrl) { // Revoga URL anterior se for de um arquivo customizado
+                    URL.revokeObjectURL(objectUrl);
+                    objectUrl = null;
                 }
-                
-                audioElement = new Audio(audioPath);
-                audioElement.crossOrigin = "anonymous";
-                audioElement.volume = volumeControl.value;
-                audioSource = audioContext.createMediaElementSource(audioElement);
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 256;
-                
-                audioSource.connect(analyser);
-                analyser.connect(audioContext.destination);
-                bufferLength = analyser.frequencyBinCount;
-                dataArray = new Uint8Array(bufferLength);
-                
-                if (playWhenLoaded) {
-                    audioElement.play()
-                        .then(() => updatePlayStateAndVisualize(true))
-                        .catch(handleAudioError);
-                } else {
-                    updatePlayStateAndVisualize(false);
-                }
-                audioElement.addEventListener('ended', handleAudioEnd);
             }
+            
+            audioElement = new Audio(audioPath);
+            audioElement.crossOrigin = "anonymous";
+            audioElement.volume = volumeControl.value;
 
-            function handleAudioError(err) {
+            playBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-xl"></i>';
+            playBtn.disabled = true;
+            trackSelect.disabled = true;
+
+            audioElement.addEventListener('canplaythrough', () => handleCanPlayThrough(playWhenReady), { once: true });
+            audioElement.addEventListener('error', handleAudioError);
+            audioElement.addEventListener('ended', handleAudioEnd);
+            
+            setupAudioProcessing();
+            audioElement.load();
+        }
+        
+        function handleCanPlayThrough(playWhenReady) {
+            playBtn.disabled = false;
+            trackSelect.disabled = false;
+            if (!playWhenReady || audioElement.paused) {
+                 updatePlayButtonUI(false);
+            }
+            if (playWhenReady) {
+                playAudio();
+            }
+        }
+
+        async function playAudio() {
+            if (!audioElement || !audioContext) return;
+            await initAudioContextOnce();
+            try {
+                await audioElement.play();
+                updatePlayButtonUI(true);
+                isPlaying = true;
+                if (!animationFrameId) visualize();
+            } catch (err) {
                 console.error("Erro ao reproduzir áudio:", err);
-                updatePlayStateAndVisualize(false, true);
+                updatePlayButtonUI(false); isPlaying = false;
             }
+        }
 
-            function handleAudioEnd() {
-                updatePlayStateAndVisualize(false, true);
+        function pauseAudio() {
+            if (audioElement) audioElement.pause();
+            updatePlayButtonUI(false); isPlaying = false;
+            if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+        }
+        
+        function togglePlayback() {
+            if (!audioElement || !audioElement.src) { // Nenhuma faixa carregada
+                loadAudio(trackSelect.value, true); return;
             }
-            
-            function stopAudio(resetVisuals = true) {
-                if (audioElement) {
-                    audioElement.pause();
-                    audioElement.currentTime = 0;
-                }
-                updatePlayStateAndVisualize(false, resetVisuals);
+            if (audioContext.state === 'suspended') {
+                 initAudioContextOnce().then(() => {
+                    if (audioElement.paused) playAudio(); else pauseAudio();
+                 });
+            } else {
+                if (audioElement.paused) playAudio(); else pauseAudio();
             }
+        }
 
-            function updatePlayStateAndVisualize(playing, resetVisualsOnStop = false) {
-                const oldIsPlaying = isPlaying;
-                isPlaying = playing;
-
-                if (isPlaying) {
-                    playBtn.innerHTML = '<i class="fas fa-pause text-xl"></i>';
-                    playBtn.classList.remove('pulse');
-                    if (animationFrameId === null) {
-                       visualize();
-                    }
-                } else {
-                    playBtn.innerHTML = '<i class="fas fa-play text-xl"></i>';
-                    playBtn.classList.add('pulse');
-                    if (animationFrameId !== null) {
-                        cancelAnimationFrame(animationFrameId);
-                        animationFrameId = null;
-                    }
-                    if (resetVisualsOnStop || (audioElement && audioElement.currentTime === 0 && !oldIsPlaying) ) {
-                        resetVisualizations();
-                    }
-                }
-            }
-            
-            function resetVisualizations() {
-                const bars = visualizer.querySelectorAll('.visualizer-bar');
-                bars.forEach(bar => {
-                    bar.style.height = '1px';
-                    bar.style.background = 'linear-gradient(to top, #ff8c00, #ff4500)';
-                });
-                
-                const flames = tubeElement.querySelectorAll('.tube-flame');
-                flames.forEach(flame => {
-                    flame.style.height = '30px'; 
-                    flame.style.opacity = '0.8';
-                    flame.style.width = '20px'; 
-                    flame.style.transform = 'translateX(0px)';
-                });
-            }
-
-            function visualize() {
-                if (!analyser) return;
-                animationFrameId = requestAnimationFrame(visualize);
-                analyser.getByteFrequencyData(dataArray);
-                
-                const bars = visualizer.querySelectorAll('.visualizer-bar');
-                const visualizerHeight = visualizer.clientHeight;
-                for (let i = 0; i < bars.length; i++) {
-                    const value = dataArray[Math.floor(i * bufferLength / bars.length)] / 255;
-                    const barHeight = Math.max(1, value * visualizerHeight * 0.9);
-                    bars[i].style.height = `${barHeight}px`;
-                    const hue = 20 + (value * 40);
-                    bars[i].style.background = `linear-gradient(to top, hsl(${hue}, 100%, 50%), hsl(${hue + 10}, 100%, 40%))`;
-                }
-                
-                const tubeFlames = tubeElement.querySelectorAll('.tube-flame');
-                for (let i = 0; i < tubeFlames.length; i++) {
-                    const waveIndex = Math.floor(i / tubeFlames.length * bufferLength);
-                    const bassIndex = Math.floor(i / tubeFlames.length * (bufferLength / 4));
-                    const highFreq = dataArray[waveIndex] / 255;
-                    const lowFreq = dataArray[bassIndex] / 255;
-                    const combinedValue = (highFreq * 0.7 + lowFreq * 0.3);
-                    
-                    const height = 20 + (combinedValue * 120);
-                    tubeFlames[i].style.height = `${height}px`;
-                    tubeFlames[i].style.opacity = 0.5 + (combinedValue * 0.5);
-                    tubeFlames[i].style.width = `${15 + (combinedValue * 25)}px`;
-                    const hueFlame = 30 + (highFreq * 30);
-                    tubeFlames[i].style.background = `linear-gradient(to top, hsl(${hueFlame}, 100%, 60%), hsl(${hueFlame + 10}, 100%, 50%), hsl(${hueFlame + 20}, 100%, 40%))`;
-                    tubeFlames[i].style.transform = `translateX(${(Math.sin(Date.now()/200 + i/5) * (lowFreq * 5))}px) scale(0.7)`; // Adicionado scale(0.7) de volta aqui para .tube-flame
-                }
-            }
-            
+        function handleAudioEnd() {
+            updatePlayButtonUI(false); isPlaying = false;
+            if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
             resetVisualizations();
-            
-            document.body.addEventListener('click', function() {
-                initAudioContext();
-                 if (audioContext.state === 'suspended') {
-                    audioContext.resume();
-                }
-            }, { once: true });
+        }
+
+        function handleAudioError(err) {
+            console.error("Erro no áudio:", err);
+            updatePlayButtonUI(false); isPlaying = false;
+            playBtn.disabled = false; trackSelect.disabled = false;
+            if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+            alert("Erro ao carregar a faixa de áudio. Tente outra ou verifique o console.");
+        }
+
+        function updatePlayButtonUI(playing) {
+            playBtn.innerHTML = playing ? '<i class="fas fa-pause text-xl"></i>' : '<i class="fas fa-play text-xl"></i>';
+            playBtn.setAttribute('aria-label', playing ? 'Pausar Áudio' : 'Reproduzir Áudio');
+            if (playing) playBtn.classList.remove('pulse'); else playBtn.classList.add('pulse');
+        }
+        
+        function resetVisualizations() {
+            visualizerBars.forEach(bar => { bar.style.height = '1px'; bar.style.background = 'linear-gradient(to top, #ff8c00, #ff4500)'; });
+            tubeFlames.forEach(flame => {
+                flame.style.height = '30px'; flame.style.opacity = '0.8'; flame.style.width = '20px'; 
+                flame.style.background = 'linear-gradient(to top, rgba(255,215,0,0.8), rgba(255,140,0,0.7), rgba(255,69,0,0.6), rgba(139,0,0,0.5))';
+                flame.style.transform = 'translateX(0px) scale(0.7)';
+            });
+        }
+
+        // --- Loop de Visualização ---
+        function visualize() {
+            if (!analyser || !dataArray || !isPlaying) {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                animationFrameId = null; return;
+            }
+            animationFrameId = requestAnimationFrame(visualize);
+            analyser.getByteFrequencyData(dataArray);
+
+            const barStep = bufferLength / NUM_VISUALIZER_BARS;
+            for (let i = 0; i < NUM_VISUALIZER_BARS; i++) {
+                const bar = visualizerBars[i];
+                const dataIdx = Math.floor(i * barStep);
+                const value = (dataArray[dataIdx] || 0) / 255.0;
+                const barHeight = Math.max(1, value * visualizerHeight * 0.95 * currentSensitivity);
+                bar.style.height = `${barHeight}px`;
+                const hue = 20 + (value * 40);
+                bar.style.background = `linear-gradient(to top, hsl(${hue}, 100%, 50%), hsl(${hue + 15}, 100%, 45%))`;
+            }
+
+            const currentTime = Date.now();
+            for (let i = 0; i < NUM_TUBE_FLAMES; i++) {
+                const flame = tubeFlames[i];
+                const waveIndex = Math.floor(i / NUM_TUBE_FLAMES * bufferLength);
+                const bassIndex = Math.floor(i / NUM_TUBE_FLAMES * (bufferLength / 4)); // Graves
+                const highFreq = (dataArray[waveIndex] || 0) / 255.0;
+                const lowFreq = (dataArray[bassIndex] || 0) / 255.0;
+                const combinedValue = (highFreq * 0.7 + lowFreq * 0.3) * currentSensitivity;
+                
+                const height = 20 + (combinedValue * 120);
+                flame.style.height = `${Math.max(5, height)}px`;
+                flame.style.opacity = Math.min(1, 0.4 + (combinedValue * 0.6));
+                flame.style.width = `${15 + (combinedValue * 25)}px`;
+                const hueFlame = 30 + (highFreq * 30);
+                flame.style.background = `linear-gradient(to top, hsl(${hueFlame}, 100%, 60%), hsl(${hueFlame + 10}, 100%, 50%), hsl(${hueFlame + 20}, 100%, 40%))`;
+                const movement = Math.sin(currentTime / 200 + i / 5) * (lowFreq * 7 * currentSensitivity);
+                flame.style.transform = `translateX(${movement}px) scale(0.7)`;
+            }
+        }
+        
+        // --- Event Listeners Adicionais ---
+        playBtn.addEventListener('click', togglePlayback);
+        trackSelect.addEventListener('change', function() {
+            pauseAudio(); resetVisualizations();
+            loadAudio(this.value, isPlaying); // Toca se estava tocando antes
         });
+        volumeControl.addEventListener('input', function() { if (audioElement) audioElement.volume = this.value; });
+        window.addEventListener('resize', () => { if (visualizerContainer) visualizerHeight = visualizerContainer.clientHeight; });
+
+        // 1. Modo Escuro/Claro Dinâmico
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const isLightMode = document.body.classList.contains('light-mode');
+            themeToggleBtn.innerHTML = isLightMode ? '<i class="fas fa-moon"></i> <span>Modo Escuro</span>' : '<i class="fas fa-sun"></i> <span>Modo Claro</span>';
+            if (isLightMode) {
+                decorativeFlamesContainer.style.display = 'none'; // Esconde chamas decorativas no modo claro
+            } else {
+                decorativeFlamesContainer.style.display = 'block';
+            }
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+        });
+        // Aplicar tema salvo
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> <span>Modo Escuro</span>';
+            decorativeFlamesContainer.style.display = 'none';
+        }
+
+
+        // 2. Explicação Visual dos Nós e Antinós
+        toggleWaveBtn.addEventListener('click', () => {
+            waveDiagramDiv.classList.toggle('hidden');
+            toggleWaveBtn.textContent = waveDiagramDiv.classList.contains('hidden') ? 'Visualizar Nós e Antinós' : 'Ocultar Visualização';
+        });
+
+        // 3. Upload de Áudio Personalizado
+        customAudioInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                if (objectUrl) URL.revokeObjectURL(objectUrl); // Revoga URL anterior
+                objectUrl = URL.createObjectURL(e.target.files[0]);
+                pauseAudio(); resetVisualizations();
+                loadAudio(objectUrl, true); // Toca imediatamente
+                trackSelect.value = ""; // Opcional: desmarcar a faixa selecionada
+            }
+        });
+
+        // 4. Salvar Imagem da Simulação
+        saveTubeImgBtn.addEventListener('click', function() {
+            if (typeof html2canvas === 'undefined') {
+                alert("Erro: Biblioteca de captura de imagem não carregada.");
+                return;
+            }
+            // Pausar a animação momentaneamente para uma captura mais estável
+            const wasPlaying = isPlaying;
+            if (wasPlaying) pauseAudio();
+
+            html2canvas(tubeContainer, { 
+                backgroundColor: null, // Para fundo transparente se o container não tiver cor
+                useCORS: true // Se houver imagens externas (não é o caso aqui)
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'simulacao_tubo_rubens.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                if (wasPlaying) playAudio(); // Retoma se estava tocando
+            }).catch(err => {
+                console.error("Erro ao capturar imagem:", err);
+                alert("Falha ao capturar a imagem.");
+                if (wasPlaying) playAudio();
+            });
+        });
+
+        // 5. Ajuste de Sensibilidade
+        sensitivityControl.addEventListener('input', function() {
+            currentSensitivity = parseFloat(this.value);
+        });
+
+        // --- Inicialização da Aplicação ---
+        setupDOMReferences();
+        resetVisualizations();
+        loadAudio(trackSelect.value, false); // Carrega a primeira faixa, mas não toca
+
+        document.body.addEventListener('click', initAudioContextOnce, { once: true });
+        document.body.addEventListener('touchstart', initAudioContextOnce, { once: true });
+    });
     </script>
 </body>
 </html>
